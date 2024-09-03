@@ -1,0 +1,32 @@
+# Define the Car class
+class Car:
+    # Constructor to initialize the car attributes
+    def __init__(self, brand, model, year):
+        self.brand = brand
+        self.model = model
+        self.year = year
+
+    # Method to display car information
+    def car_info(self):
+        print(f"Car Info: {self.year} {self.brand} {self.model}")
+
+    # Method to start the car
+    def start(self):
+        print(f"The {self.model} is starting.")
+
+    # Method to stop the car
+    def stop(self):
+        print(f"The {self.model} is stopping.")
+
+# Create an object of the Car class
+my_car = Car("Toyota", "Camry", 2022)
+
+# Accessing the car's methods and attributes
+my_car.car_info()  # Display car information
+my_car.start()      # Start the car
+my_car.stop()       # Stop the car
+
+# Accessing attributes directly
+print(f"Brand: {my_car.brand}")
+print(f"Model: {my_car.model}")
+print(f"Year: {my_car.year}")
