@@ -1,0 +1,95 @@
+# Define the Product class
+class Product:
+    def __init__(self, name, price, stock):
+        self.name = name
+        self.price = price
+        self.stock = stock
+
+    # Method to update stock after a sale or restock
+    def update_stock(self, quantity):
+        if quantity <= self.stock:
+            self.stock -= quantity
+        else:
+            print(f"Not enough stock for {self.name}. Available: {self.stock}")
+
+# Define the ShoppingCart class
+class ShoppingCart:
+    def __init__(self):
+        self.items = {}  # Dictionary to store products and quantities
+        self.total_amount = 0
+
+    # Method to add a product to the cart
+    def add_to_cart(self, product, quantity):
+        if quantity > product.stock:
+            print(f"Cannot add {quantity} {product.name}(s). Only {product.stock} available in stock.")
+            return
+
+        if product.name in self.items:
+            self.items[product.name]['quantity'] += quantity
+        else:
+            self.items[product.name] = {'product': product, 'quantity': quantity}
+
+        product.update_stock(quantity)
+        print(f"Added {quantity} {product.name}(s) to the cart.")
+
+    # Method to remove a product from the cart
+    def remove_from_cart(self, product_name, quantity):
+        if product_name in self.items:
+            if quantity >= self.items[product_name]['quantity']:
+                quantity = self.items[product_name]['quantity']
+                del self.items[product_name]
+            else:
+                self.items[product_name]['quantity'] -= quantity
+
+            print(f"Removed {quantity} {product_name}(s) from the cart.")
+        else:
+            print(f"{product_name} is not in the cart.")
+
+    # Method to calculate the total amount
+    def calculate_total(self):
+        self.total_amount = sum(item['product'].price * item['quantity'] for item in self.items.values())
+        return self.total_amount
+
+    # Method to apply a discount
+    def apply_discount(self, discount_percentage):
+        discount = (self.total_amount * discount_percentage) / 100
+        self.total_amount -= discount
+        print(f"Discount of {discount_percentage}% applied. New total: {self.total_amount:.2f}")
+
+    # Method to checkout
+    def checkout(self):
+        if not self.items:
+            print("Your cart is empty. Please add items to checkout.")
+            return
+        
+        self.calculate_total()
+        print(f"Total amount to be paid: {self.total_amount:.2f}")
+        self.items.clear()
+        self.total_amount = 0
+        print("Checkout successful. Thank you for your purchase!")
+
+# Sample Usage
+
+# Creating product instances
+product1 = Product("Laptop", 1000, 10)
+product2 = Product("Phone", 500, 20)
+
+# Creating a shopping cart instance
+cart = ShoppingCart()
+
+# Adding products to the cart
+cart.add_to_cart(product1, 2)  # Adding 2 Laptops
+cart.add_to_cart(product2, 1)  # Adding 1 Phone
+
+# Removing product from the cart
+cart.remove_from_cart("Laptop", 1)  # Removing 1 Laptop
+
+# Calculating the total amount
+total = cart.calculate_total()
+print(f"Total amount before discount: {total}")
+
+# Applying a discount
+cart.apply_discount(10)  # Applying a 10% discount
+
+# Checkout
+cart.checkout()
